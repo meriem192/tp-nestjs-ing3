@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTravelDto } from './dto/create-travel.dto.js';
 import { UpdateTravelDto } from './dto/update-travel.dto.js';
 import { Travel } from './entities/travel.entity.js';
@@ -15,11 +15,16 @@ export class TravelService {
   }
 
   findAll() {
-    return `This action returns all travel`;
+    return this.trips;
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} travel`;
+    const travel=this.trips.find(x=>x.id==id);
+    if(!travel)
+    {
+      throw new NotFoundException(`Travel with id ${id} not found`)
+    }
+    return travel;
   }
 
   update(id: number, updateTravelDto: UpdateTravelDto) {
